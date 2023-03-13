@@ -13,15 +13,20 @@
     />
     <title>Company Information</title>
   </head>
-  <body class="main-container">
-    <div id="info-container"></div>
-    <div class="spinner-border d-none" role="status" id="info-spinner">
-      <span class="visually-hidden">Loading...</span>
+  <body>
+    <div class="previous-page">
+      <a href="./index.html">&larr; Go back</a>
     </div>
-    <canvas id="myChart"></canvas>
+    <div class="main-container">
+      <div id="info-container"></div>
+      <div class="spinner-border d-none" role="status" id="info-spinner">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <canvas id="myChart"></canvas>
 
-    <div class="spinner-border d-none" role="status" id="chart-spinner">
-      <span class="visually-hidden">Loading...</span>
+      <div class="spinner-border d-none" role="status" id="chart-spinner">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./company.js"></script>

@@ -22,25 +22,40 @@ const displaySymbol = async () => {
   const data = await fetchSymbol();
   toggleInfoSpinner();
   const company = data.profile;
-  console.log(company);
+  const description = shortenString(company.description);
   infoContainer.innerHTML = `
     <div class="company-title">
     <img src="${company.image}" />
     <span>${company.companyName}</span>
     </div>
-    <p>${company.description} <a href="${company.website}" target="_blank">${
+    <p class="company-price"><b>Stock price: $${
+      company.price
+    } ${isNumberNegative(company.changesPercentage)}</b></p>
+    <p>${description} <a href="${company.website}" target="_blank">${
     company.website
   }</a></p>
-    <p><b>Price: $${company.price}</b></p>
-    <p><b>Changes: ${isNumberNegative(company.changesPercentage)}</b></p>
   `;
 };
 
+function shortenString(str) {
+  if (str.length <= 500) {
+    return str;
+  } else {
+    let trimmedString = str.slice(0, 500);
+    let lastSpaceIndex = trimmedString.lastIndexOf(" ");
+    if (lastSpaceIndex !== -1) {
+      return trimmedString.slice(0, lastSpaceIndex) + "...";
+    } else {
+      return trimmedString + "...";
+    }
+  }
+}
+
 const isNumberNegative = (n) => {
   if (n >= 0) {
-    return `<span class="positive">${n}%</span>`;
+    return `<span class="positive">(${n}%)</span>`;
   } else {
-    return `<span class="negative">${n}%</span>`;
+    return `<span class="negative">(${n}%)</span>`;
   }
 };
 

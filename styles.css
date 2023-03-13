@@ -1,3 +1,7 @@
+.previous-page {
+  padding: 20px 20px 0px 20px;
+}
+
 a {
   text-decoration: none;
 }
@@ -15,12 +19,16 @@ a {
   color: red;
 }
 
+body,
+html {
+  min-height: 100vh;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100%;
   padding: 20px;
 }
 
@@ -42,6 +50,10 @@ a {
   font-size: 1.4rem;
 }
 
+.company-price {
+  font-size: 1.2rem;
+}
+
 .company-title img {
   margin-right: 15px;
 }
@@ -49,4 +61,15 @@ a {
 #myChart {
   max-width: 800px;
   max-height: 500px;
+}
+
+.search-image {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.small-text {
+  color: rgb(95, 95, 95);
+  font-size: 0.8rem;
 }
