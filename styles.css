@@ -1,3 +1,52 @@
 a {
   text-decoration: none;
 }
+
+#info-container img {
+  width: 70px;
+  height: 70px;
+}
+
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+#info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 800px;
+}
+
+.company-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.company-title span {
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.company-title img {
+  margin-right: 15px;
+}
+
+#myChart {
+  max-width: 800px;
+  max-height: 500px;
+}

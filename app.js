@@ -4,24 +4,23 @@ const searchResults = document.querySelector("#search-results");
 const spinner = document.querySelector("#spinner");
 
 const handleSearchButtonClick = () => {
-  const inputValue = searchInput.value;
-  renderResults(inputValue);
+  displayResults();
 };
 
-const fetchResults = async (input) => {
+const fetchResults = async () => {
   const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${input}&limit=10&exchange=NASDAQ`
+    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${searchInput.value}&limit=10&exchange=NASDAQ`
   );
   const json = await res.json();
   return json;
 };
 
-const renderResults = async (input) => {
+const displayResults = async () => {
   toggleSpinner();
-  const data = await fetchResults(input);
+  const data = await fetchResults();
   toggleSpinner();
   data.forEach((obj) => {
-    searchResults.innerHTML += `<a class="border-bottom text-decoration-none" href="./company.html?symbol=${obj.symbol}">${obj.name} (${obj.symbol})</a>`;
+    searchResults.innerHTML += `<a class="border-bottom text-decoration-none mb-2" href="./company.html?symbol=${obj.symbol}">${obj.name} (${obj.symbol})</a>`;
   });
 };
 
