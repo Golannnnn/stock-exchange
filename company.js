@@ -18,26 +18,35 @@ const fetchSymbol = async () => {
 };
 
 const displaySymbol = async () => {
-  toggleInfoSpinner();
+  toggleSpinner(infoSpinner);
   const data = await fetchSymbol();
-  toggleInfoSpinner();
+  toggleSpinner(infoSpinner);
   const company = data.profile;
   const description = shortenString(company.description);
-  infoContainer.innerHTML = `
-    <div class="company-title">
-    <img src="${company.image}" />
-    <span>${company.companyName}</span>
-    </div>
-    <p class="company-price"><b>Stock price: $${
-      company.price
-    } ${isNumberNegative(company.changesPercentage)}</b></p>
-    <p>${description} <a href="${company.website}" target="_blank">${
+  modifyHTML(
+    company.image,
+    company.companyName,
+    company.price,
+    company.changesPercentage,
+    description,
     company.website
-  }</a></p>
-  `;
+  );
 };
 
-function shortenString(str) {
+const modifyHTML = (img, name, price, changes, desc, site) => {
+  infoContainer.innerHTML = `
+  <div class="company-title">
+  <img src="${img}" />
+  <span>${name}</span>
+  </div>
+  <p class="company-price"><b>Stock price: $${price} ${isNumberNegative(
+    changes
+  )}</b></p>
+  <p>${desc} <a href="${site}" target="_blank">${site}</a></p>
+`;
+};
+
+const shortenString = (str) => {
   if (str.length <= 500) {
     return str;
   } else {
@@ -49,7 +58,7 @@ function shortenString(str) {
       return trimmedString + "...";
     }
   }
-}
+};
 
 const isNumberNegative = (n) => {
   if (n >= 0) {
@@ -89,7 +98,7 @@ const filterByYear = (array) => {
 };
 
 const displayCompanyProfile = async () => {
-  toggleChartSpinner();
+  toggleSpinner(chartSpinner);
   const data = await fetchCompanyProfile();
   const modifiedData = filterByYear(data.historical);
   const labels = modifiedData.map((obj) => obj.date);
@@ -116,16 +125,12 @@ const displayCompanyProfile = async () => {
     },
   };
 
-  toggleChartSpinner();
+  toggleSpinner(chartSpinner);
   new Chart(ctx, config);
 };
 
-const toggleInfoSpinner = () => {
-  infoSpinner.classList.toggle("d-none");
-};
-
-const toggleChartSpinner = () => {
-  chartSpinner.classList.toggle("d-none");
+const toggleSpinner = (spinner) => {
+  spinner.classList.toggle("d-none");
 };
 
 window.addEventListener("load", () => {

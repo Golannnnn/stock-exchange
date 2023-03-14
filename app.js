@@ -1,3 +1,4 @@
+const marqueeContent = document.getElementById("marquee-content");
 const searchInput = document.querySelector("#search-input");
 const searchButton = document.querySelector("#search-button");
 const searchResults = document.querySelector("#search-results");
@@ -17,6 +18,34 @@ const fetchCompanyInfo = async (symbols) => {
   );
   const json = await res.json();
   return json;
+};
+
+const fetchNasdaqCompanies = async () => {
+  const res = await fetch(
+    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/nasdaq_constituent`
+  );
+  const json = await res.json();
+  const array = json.map((obj) => obj.symbol);
+  const shotenArray = array.slice(array.length / 2);
+  return shotenArray.join(",");
+};
+
+const fetchMarqueeInfo = async () => {
+  const symbols = await fetchNasdaqCompanies();
+  const res = await fetch(
+    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/quote-short/${symbols}`
+  );
+  const json = await res.json();
+  return json;
+};
+
+const displayMarqueeInfo = async () => {
+  const data = await fetchMarqueeInfo();
+  data.forEach((obj) => {
+    marqueeContent.innerHTML += `<span>${obj.symbol} ${isPriceNegative(
+      obj.price
+    )}</span>`;
+  });
 };
 
 const joinSymbols = (data) => {
@@ -79,11 +108,15 @@ const modifyHTML = (sym, img, name, change) => {
 };
 
 const isNumberNegative = (n) => {
-  if (n >= 0) {
-    return `<span class="positive">(${n}%)</span>`;
-  } else {
-    return `<span class="negative">(${n}%)</span>`;
-  }
+  return n >= 0
+    ? `<span class="positive">(${n}%)</span>`
+    : `<span class="negative">(${n}%)</span>`;
+};
+
+const isPriceNegative = (n) => {
+  return n >= 0
+    ? `<span class="positive">${n}</span>`
+    : `<span class="negative">${n}</span>`;
 };
 
 const toggleSpinner = () => {
@@ -101,4 +134,8 @@ searchInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     handleSearchButtonClick();
   }
+});
+
+window.addEventListener("load", () => {
+  displayMarqueeInfo();
 });
