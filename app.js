@@ -11,12 +11,33 @@ const fetchResults = async () => {
   return json;
 };
 
-const fetchCompanyInfo = async (obj) => {
+const fetchCompanyInfo = async (symbols) => {
   const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${obj.symbol}`
+    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbols}`
   );
   const json = await res.json();
   return json;
+};
+
+const joinSymbols = (data) => {
+  const symbolsArray = data.map((obj) => obj.symbol);
+  const joinedSymbolsArray = [];
+
+  while (symbolsArray.length > 0) {
+    joinedSymbolsArray.push(symbolsArray.splice(0, 3).join(","));
+  }
+
+  return joinedSymbolsArray;
+};
+
+const fetchAndCombinePromises = async (array) => {
+  const promises = array.map(async (batch) => {
+    const promise = await fetchCompanyInfo(batch);
+    return promise;
+  });
+
+  const allPromises = await Promise.all(promises);
+  return allPromises;
 };
 
 const displayResults = async () => {
@@ -24,18 +45,37 @@ const displayResults = async () => {
   const data = await fetchResults();
   toggleSpinner();
 
-  data.forEach(async (obj) => {
-    const company = await fetchCompanyInfo(obj);
-    if (!company.profile) return "";
-    searchResults.innerHTML += `<a class="border-bottom text-decoration-none mb-2" href="./company.html?symbol=${
-      obj.symbol
-    }">
-    <img class="search-image" src="${company.profile.image}" />
-      ${obj.name} <span class="small-text">(${obj.symbol}) ${isNumberNegative(
-      company.profile.changesPercentage
-    )}</span>
-    </a>`;
+  const symbolsArray = joinSymbols(data);
+  const allPromises = await fetchAndCombinePromises(symbolsArray);
+
+  allPromises.forEach((obj) => {
+    if (obj.profile) {
+      const company = obj.profile;
+      modifyHTML(
+        obj.symbol,
+        company.image,
+        company.companyName,
+        company.changesPercentage
+      );
+    } else {
+      obj.companyProfiles.forEach((obj) => {
+        const company = obj.profile;
+        modifyHTML(
+          obj.symbol,
+          company.image,
+          company.companyName,
+          company.changesPercentage
+        );
+      });
+    }
   });
+};
+
+const modifyHTML = (sym, img, name, change) => {
+  searchResults.innerHTML += `<a class="border-bottom text-decoration-none mb-2" href="./company.html?symbol=${sym}">
+  <img class="search-image" src="${img}" />
+    ${name} <span class="small-text">(${sym}) ${isNumberNegative(change)}</span>
+  </a>`;
 };
 
 const isNumberNegative = (n) => {
