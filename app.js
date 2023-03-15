@@ -1,51 +1,31 @@
-const marqueeContent = document.getElementById("marquee-content");
+const marqueeContainer = document.querySelector(".marquee-container");
 const searchInput = document.querySelector("#search-input");
 const searchButton = document.querySelector("#search-button");
-const searchResults = document.querySelector("#search-results");
+const searchResults = document.querySelector("#results");
 const spinner = document.querySelector("#spinner");
 
 const fetchResults = async () => {
-  const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${searchInput.value}&limit=10&exchange=NASDAQ`
-  );
-  const json = await res.json();
-  return json;
+  try {
+    const res = await fetch(
+      `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${searchInput.value}&limit=10&exchange=NASDAQ`
+    );
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const fetchCompanyInfo = async (symbols) => {
-  const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbols}`
-  );
-  const json = await res.json();
-  return json;
-};
-
-const fetchNasdaqCompanies = async () => {
-  const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/nasdaq_constituent`
-  );
-  const json = await res.json();
-  const array = json.map((obj) => obj.symbol);
-  const shotenArray = array.slice(array.length / 2);
-  return shotenArray.join(",");
-};
-
-const fetchMarqueeInfo = async () => {
-  const symbols = await fetchNasdaqCompanies();
-  const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/quote-short/${symbols}`
-  );
-  const json = await res.json();
-  return json;
-};
-
-const displayMarqueeInfo = async () => {
-  const data = await fetchMarqueeInfo();
-  data.forEach((obj) => {
-    marqueeContent.innerHTML += `<span>${obj.symbol} ${isPriceNegative(
-      obj.price
-    )}</span>`;
-  });
+  try {
+    const res = await fetch(
+      `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbols}`
+    );
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const joinSymbols = (data) => {
@@ -60,13 +40,17 @@ const joinSymbols = (data) => {
 };
 
 const fetchAndCombinePromises = async (array) => {
-  const promises = array.map(async (batch) => {
-    const promise = await fetchCompanyInfo(batch);
-    return promise;
-  });
+  try {
+    const promises = array.map(async (batch) => {
+      const promise = await fetchCompanyInfo(batch);
+      return promise;
+    });
 
-  const allPromises = await Promise.all(promises);
-  return allPromises;
+    const allPromises = await Promise.all(promises);
+    return allPromises;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const displayResults = async () => {
@@ -101,22 +85,21 @@ const displayResults = async () => {
 };
 
 const modifyHTML = (sym, img, name, change) => {
-  searchResults.innerHTML += `<a class="border-bottom text-decoration-none mb-2" href="./company.html?symbol=${sym}">
-  <img class="search-image" src="${img}" />
-    ${name} <span class="small-text">(${sym}) ${isNumberNegative(change)}</span>
-  </a>`;
+  searchResults.innerHTML += `
+  <tr>
+    <td>${sym}</td>
+    <td class="text-break">
+    <a class="text-decoration-none" href="./company.html?symbol=${sym}"><img class="search-image" src="${img}" />${name}</a>
+    </td>
+    <td>${isNumberNegative(change)}</td>
+  </tr>
+  `;
 };
 
 const isNumberNegative = (n) => {
   return n >= 0
-    ? `<span class="positive">(${n}%)</span>`
-    : `<span class="negative">(${n}%)</span>`;
-};
-
-const isPriceNegative = (n) => {
-  return n >= 0
-    ? `<span class="positive">${n}</span>`
-    : `<span class="negative">${n}</span>`;
+    ? `<span class="positive">${n}%</span>`
+    : `<span class="negative">${n}%</span>`;
 };
 
 const toggleSpinner = () => {
@@ -137,5 +120,6 @@ searchInput.addEventListener("keypress", (e) => {
 });
 
 window.addEventListener("load", () => {
-  displayMarqueeInfo();
+  const marquee = new Marquee(marqueeContainer);
+  marquee.render();
 });

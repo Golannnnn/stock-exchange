@@ -9,12 +9,16 @@ const grabSymbol = () => {
 };
 
 const fetchSymbol = async () => {
-  const symbol = grabSymbol();
-  const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbol}`
-  );
-  const json = await res.json();
-  return json;
+  try {
+    const symbol = grabSymbol();
+    const res = await fetch(
+      `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbol}`
+    );
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const displaySymbol = async () => {
@@ -69,12 +73,16 @@ const isNumberNegative = (n) => {
 };
 
 const fetchCompanyProfile = async () => {
-  const symbol = grabSymbol();
-  const res = await fetch(
-    `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbol}?serietype=line`
-  );
-  const json = await res.json();
-  return json;
+  try {
+    const symbol = grabSymbol();
+    const res = await fetch(
+      `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbol}?serietype=line`
+    );
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const filterByYear = (array) => {
@@ -105,12 +113,13 @@ const displayCompanyProfile = async () => {
   const price = modifiedData.map((obj) => obj.close);
   const ctx = document.getElementById("myChart");
   const config = {
-    type: "bar",
+    type: "line",
     data: {
       labels: labels,
       datasets: [
         {
           label: "Stock price",
+          fill: true,
           data: price,
           borderWidth: 1,
         },
