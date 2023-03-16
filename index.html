@@ -16,39 +16,12 @@
   </head>
   <body>
     <div class="marquee-container"></div>
-
     <div class="d-flex justify-content-center flex-column mt-5 index-container">
       <h1 class="d-flex justify-content-center mb-5 title">
         Stock Exchange Search
       </h1>
-      <div class="d-flex justify-content-center mb-5" id="form">
-        <input
-          type="text"
-          class="form-control me-2"
-          placeholder="Stock search"
-          aria-label="Stock search"
-          id="search-input"
-        />
-        <button class="btn btn-primary" id="search-button">Search</button>
-      </div>
-      <div class="d-flex flex-column justify-content-center align-items-center">
-        <div class="table-responsive w-100">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Symbol</th>
-                <th scope="col">Name</th>
-                <th scope="col">Change</th>
-              </tr>
-            </thead>
-            <tbody id="results"></tbody>
-          </table>
-        </div>
-
-        <div class="spinner-border d-none" role="status" id="spinner">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
+      <div id="form"></div>
+      <div id="results"></div>
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -56,6 +29,21 @@
       crossorigin="anonymous"
     ></script>
     <script src="./Marquee.js"></script>
-    <script src="./app.js" defer></script>
+    <script src="./SearchForm.js"></script>
+    <script src="./SearchResult.js"></script>
+    <script>
+      (async function () {
+        const marqueeContainer = document.querySelector(".marquee-container");
+        const marquee = new Marquee(marqueeContainer);
+        marquee.render();
+        const formEl = document.querySelector("#form");
+        const form = new SearchForm(formEl);
+        const resultEl = document.querySelector("#results");
+        const results = new SearchResult(resultEl);
+        form.onSearch((companies) => {
+          results.renderResults(companies);
+        });
+      })();
+    </script>
   </body>
 </html>
