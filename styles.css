@@ -3,7 +3,11 @@
   position: sticky;
   top: 0;
   padding: 20px 20px 20px 20px;
-  background-color: white;
+  background-color: #212529 !important;
+}
+
+.previous-page a {
+  color: white !important;
 }
 
 a {
@@ -20,16 +24,18 @@ a {
 }
 
 .positive {
-  color: green;
+  color: rgb(51, 194, 51);
 }
 
 .negative {
-  color: red;
+  color: rgb(255, 97, 97) !important;
 }
 
 body,
 html {
   min-height: 100vh;
+  background-color: #212529 !important;
+  color: white !important;
 }
 
 .index-container {
@@ -136,4 +142,48 @@ html {
     -webkit-transform: translateX(-100%);
     transform: translateX(-100%);
   }
+}
+
+/* Extra small devices (phones) */
+@media only screen and (max-width: 575px) {
+  .container-lg.container-xl {
+    width: 100%;
+  }
+  .mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Small devices (768px and above) */
+@media only screen and (min-width: 576px) {
+  .container-lg.container-xl {
+    width: 75%;
+  }
+  .mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Medium devices (992px and above) */
+@media only screen and (min-width: 768px) {
+  .container-lg.container-xl {
+    width: 75%;
+  }
+}
+
+/* Large devices (1200px and above) */
+@media only screen and (min-width: 1200px) {
+  .container-lg.container-xl {
+    width: 50%;
+  }
+}
+
+.stock-name {
+  color: #d7d7d7;
+}
+
+.light-font {
+  color: #f3f2f2;
 }

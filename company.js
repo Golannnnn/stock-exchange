@@ -37,16 +37,31 @@ const displaySymbol = async () => {
   );
 };
 
-const modifyHTML = (img, name, price, changes, desc, site) => {
+const testImage = async (URL) => {
+  try {
+    await new Promise((resolve, reject) => {
+      const tester = new Image();
+      tester.onload = () => resolve();
+      tester.onerror = () => reject();
+      tester.src = URL;
+    });
+    return URL;
+  } catch (error) {
+    return "./images/default-img.svg";
+  }
+};
+
+const modifyHTML = async (img, name, price, changes, desc, site) => {
+  const checkedImg = await testImage(img);
   infoContainer.innerHTML = `
   <div class="company-title">
-  <img src="${img}" />
+  <img src="${checkedImg}" />
   <span>${name}</span>
   </div>
-  <p class="company-price"><b>Stock price: $${price} ${isNumberNegative(
+  <p class="light-font"><b>Stock price: $${price} ${isNumberNegative(
     changes
   )}</b></p>
-  <p>${desc} <a href="${site}" target="_blank">${site}</a></p>
+  <p class="light-font">${desc} <a href="${site}" target="_blank">${site}</a></p>
 `;
 };
 
@@ -112,6 +127,10 @@ const displayCompanyProfile = async () => {
   const labels = modifiedData.map((obj) => obj.date);
   const price = modifiedData.map((obj) => obj.close);
   const ctx = document.getElementById("myChart");
+
+  // set default font color of chart labels to white
+  Chart.defaults.color = "#cfcfcf";
+
   const config = {
     type: "line",
     data: {

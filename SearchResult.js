@@ -12,13 +12,13 @@ class SearchResult {
       "align-items-center"
     );
     this.el.innerHTML = `
-    <div class="table-responsive w-100">
-    <table class="table table-hover">
+    <div class="table-responsive container-lg container-xl">
+    <table class="table table-hover table-dark">
       <thead>
         <tr>
-          <th scope="col">Symbol</th>
-          <th scope="col">Name</th>
-          <th scope="col">Change</th>
+          <th scope="col" class="fw-light">Symbol</th>
+          <th scope="col" class="fw-light">Name</th>
+          <th scope="col" class="fw-light">Change</th>
         </tr>
       </thead>
       <tbody class="tbody"></tbody>
@@ -31,10 +31,24 @@ class SearchResult {
     `;
   }
 
+  async testImage(URL) {
+    try {
+      await new Promise((resolve, reject) => {
+        const tester = new Image();
+        tester.onload = () => resolve();
+        tester.onerror = () => reject();
+        tester.src = URL;
+      });
+      return URL;
+    } catch (error) {
+      return "./images/default-img.svg";
+    }
+  }
+
   async renderResults(companies) {
     this.toggleSpinner();
     const allPromises = await companies;
-    allPromises.forEach((obj) => {
+    allPromises.forEach(async (obj) => {
       if (obj.profile) {
         const company = obj.profile;
         this.modifyHTML(
@@ -57,15 +71,16 @@ class SearchResult {
     });
   }
 
-  modifyHTML(sym, img, name, change) {
+  async modifyHTML(sym, img, name, change) {
     const tbody = document.querySelector(".tbody");
+    const checkedImg = await this.testImage(img);
     tbody.innerHTML += `
     <tr>
-      <td>${sym}</td>
+      <td class="fw-bold">${sym}</td>
       <td class="text-break">
-      <a class="text-decoration-none" href="./company.html?symbol=${sym}"><img class="search-image" src="${img}" />${name}</a>
+      <a class="text-decoration-none stock-name" href="./company.html?symbol=${sym}"><img class="search-image" src="${checkedImg}" />${name}</a>
       </td>
-      <td>${this.isNumberNegative(change)}</td>
+      <td class="fw-bold">${this.isNumberNegative(change)}</td>
     </tr>
     `;
   }
@@ -79,7 +94,9 @@ class SearchResult {
   toggleSpinner() {
     const spinner = document.querySelector("#spinner");
     const tbody = document.querySelector(".tbody");
+    const searchButton = document.querySelector("#search-button");
     tbody.innerHTML = "";
     spinner.classList.toggle("d-none");
+    searchButton.disabled = !searchButton.disabled;
   }
 }

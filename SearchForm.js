@@ -10,22 +10,47 @@ class SearchForm {
   }
 
   render() {
-    this.el.classList.add("d-flex", "justify-content-center", "mb-5");
+    this.el.classList.add(
+      "d-flex",
+      "flex-column",
+      "align-items-center",
+      "mb-5"
+    );
     this.el.innerHTML = `
+    <div class="d-flex container-md justify-content-center">  
       <input
       type="text"
-      class="form-control me-2"
+      class="form-control me-2 bg-light"
       placeholder="Stock search"
       aria-label="Stock search"
       id="search-input"
     />
-    <button class="btn btn-primary" id="search-button">Search</button>
+    <button class="btn btn-primary" id="search-button">Search</button> 
+    </div>
     `;
+  }
+
+  debounce(func, delay) {
+    let timeoutId;
+    return function (...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
   }
 
   handleClick() {
     const searchButton = this.el.querySelector("#search-button");
     const searchInput = this.el.querySelector("#search-input");
+    const debounceSearchInput = this.debounce(async () => {
+      this.toggleSpinner();
+      const data = await this.fetchResults();
+      const symbolsArray = this.joinSymbols(data);
+      const allPromises = await this.fetchAndCombinePromises(symbolsArray);
+      this.onSearchCallback(allPromises);
+    }, 500);
+
     searchButton.addEventListener("click", async () => {
       this.toggleSpinner();
       const data = await this.fetchResults();
@@ -33,11 +58,8 @@ class SearchForm {
       const allPromises = await this.fetchAndCombinePromises(symbolsArray);
       this.onSearchCallback(allPromises);
     });
-    searchInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        searchButton.click();
-      }
-    });
+
+    searchInput.addEventListener("keyup", debounceSearchInput);
   }
 
   async fetchResults() {
@@ -94,7 +116,9 @@ class SearchForm {
   toggleSpinner() {
     const spinner = document.querySelector("#spinner");
     const tbody = document.querySelector(".tbody");
+    const searchButton = document.querySelector("#search-button");
     tbody.innerHTML = "";
     spinner.classList.toggle("d-none");
+    searchButton.disabled = !searchButton.disabled;
   }
 }
