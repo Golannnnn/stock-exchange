@@ -192,3 +192,8 @@ html {
   background-color: #fcd535;
   color: #181a20;
 }
+
+thead th {
+  background-color: #0b0e11 !important;
+  font-size: 0.8rem;
+}

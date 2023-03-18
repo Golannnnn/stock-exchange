@@ -14,7 +14,7 @@ class SearchResult {
     this.el.innerHTML = `
     <div class="table-responsive container-lg container-xl">
     <table class="table table-hover table-dark">
-      <thead>
+      <thead class="default-table">
         <tr>
           <th scope="col" class="fw-light">Symbol</th>
           <th scope="col" class="fw-light">Name</th>
