@@ -72,14 +72,29 @@ class SearchResult {
     });
   }
 
+  highlightSearchTerms(input) {
+    const searchInput = document.querySelector("#search-input");
+    const regex = new RegExp(searchInput.value, "gi");
+    const matchedText = input.match(regex);
+    if (matchedText === null) return input;
+    const newText = input.replace(
+      regex,
+      `<span class="highlight">${matchedText[0].toString()}</span>`
+    );
+    return newText;
+  }
+
   async modifyHTML(sym, img, name, change) {
     const tbody = document.querySelector(".tbody");
     const checkedImg = await this.testImage(img);
     tbody.innerHTML += `
     <tr>
-      <td class="fw-bold">${sym}</td>
+      <td class="fw-bold stock-symbol">${this.highlightSearchTerms(sym)}</td>
       <td class="text-break">
-      <a class="text-decoration-none stock-name" href="./company.html?symbol=${sym}"><img class="search-image" src="${checkedImg}" />${name}</a>
+      <img class="search-image" src="${checkedImg}" />
+      <a class="text-decoration-none stock-name" href="./company.html?symbol=${sym}">${this.highlightSearchTerms(
+      name
+    )}</a>
       </td>
       <td class="fw-bold">${this.isNumberNegative(change)}</td>
     </tr>

@@ -187,3 +187,8 @@ html {
 .light-font {
   color: #f3f2f2;
 }
+
+.highlight {
+  background-color: #fcd535;
+  color: #181a20;
+}
