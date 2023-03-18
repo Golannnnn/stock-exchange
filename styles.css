@@ -1,46 +1,8 @@
-.previous-page {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
-  padding: 20px 20px 20px 20px;
-  background-color: #212529 !important;
-}
-
-.previous-page a {
-  color: white !important;
-}
-
-a {
-  text-decoration: none;
-}
-
-#search-input {
-  max-width: 400px;
-}
-
-#info-container img {
-  width: 70px;
-  height: 70px;
-}
-
-.positive {
-  color: rgb(14, 203, 129);
-}
-
-.negative {
-  color: rgb(255, 97, 97) !important;
-}
-
 body,
 html {
   min-height: 100vh;
   background-color: #212529 !important;
   color: white !important;
-}
-
-.index-container {
-  padding: 0px 20px 20px 20px;
-  height: 100%;
 }
 
 .main-container {
@@ -56,6 +18,62 @@ html {
   flex-direction: column;
   justify-content: center;
   max-width: 800px;
+}
+
+#info-container img {
+  width: 70px;
+  height: 70px;
+}
+
+.index-container {
+  padding: 0px 20px 20px 20px;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+#search-input {
+  max-width: 400px;
+}
+
+.positive {
+  color: rgb(14, 203, 129);
+}
+
+.negative {
+  color: rgb(255, 97, 97) !important;
+}
+
+.stock-name {
+  color: #d7d7d7;
+}
+
+.light-font {
+  color: #f3f2f2;
+}
+
+.highlight {
+  background-color: #fcd535;
+  color: #181a20;
+}
+
+thead th {
+  background-color: #0b0e11 !important;
+  font-size: 0.8rem;
+}
+
+.previous-page {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  padding: 20px 20px 20px 20px;
+  background-color: #212529 !important;
+}
+
+.previous-page a {
+  color: white !important;
 }
 
 .company-title {
@@ -144,7 +162,6 @@ html {
   }
 }
 
-/* Extra small devices (phones) */
 @media only screen and (max-width: 575px) {
   .container-lg.container-xl {
     width: 100%;
@@ -155,7 +172,6 @@ html {
   }
 }
 
-/* Small devices (768px and above) */
 @media only screen and (min-width: 576px) {
   .container-lg.container-xl {
     width: 75%;
@@ -166,34 +182,14 @@ html {
   }
 }
 
-/* Medium devices (992px and above) */
 @media only screen and (min-width: 768px) {
   .container-lg.container-xl {
     width: 75%;
   }
 }
 
-/* Large devices (1200px and above) */
 @media only screen and (min-width: 1200px) {
   .container-lg.container-xl {
     width: 50%;
   }
-}
-
-.stock-name {
-  color: #d7d7d7;
-}
-
-.light-font {
-  color: #f3f2f2;
-}
-
-.highlight {
-  background-color: #fcd535;
-  color: #181a20;
-}
-
-thead th {
-  background-color: #0b0e11 !important;
-  font-size: 0.8rem;
 }

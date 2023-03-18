@@ -6,7 +6,6 @@ class SearchForm {
     this.handleClick();
   }
 
-  // TODO: understand this better
   async onSearch(callback) {
     this.onSearchCallback = callback;
   }
@@ -67,7 +66,6 @@ class SearchForm {
   }
 
   checkQueryOnLoad() {
-    // TODO: understand this better
     const url = new URL(window.location);
     const query = url.searchParams.get("query");
     if (query) {
@@ -77,7 +75,6 @@ class SearchForm {
   }
 
   setQueryParams(value) {
-    // TODO: understand this better
     const url = new URL(window.location);
     url.searchParams.set("query", value);
     window.history.pushState(null, "", url.toString());
