@@ -2,6 +2,7 @@ class SearchForm {
   constructor(el) {
     this.el = el;
     this.render();
+    this.checkQueryOnLoad();
     this.handleClick();
   }
 
@@ -43,27 +44,45 @@ class SearchForm {
   handleClick() {
     const searchButton = this.el.querySelector("#search-button");
     const searchInput = this.el.querySelector("#search-input");
-    const debounceSearchInput = this.debounce(async () => {
-      this.toggleSpinner();
-      const data = await this.fetchResults();
-      const symbolsArray = this.joinSymbols(data);
-      const allPromises = await this.fetchAndCombinePromises(symbolsArray);
-      this.onSearchCallback(allPromises);
-    }, 500);
 
-    searchButton.addEventListener("click", async () => {
-      this.toggleSpinner();
-      const data = await this.fetchResults();
-      const symbolsArray = this.joinSymbols(data);
-      const allPromises = await this.fetchAndCombinePromises(symbolsArray);
-      this.onSearchCallback(allPromises);
+    searchButton.addEventListener("click", this.handleSearch.bind(this));
+    searchInput.addEventListener(
+      "keyup",
+      this.debounce(this.handleSearch.bind(this), 500)
+    );
+
+    window.addEventListener("load", () => {
+      if (!searchInput.value) return;
+      this.handleSearch();
     });
+  }
 
-    searchInput.addEventListener("keyup", debounceSearchInput);
+  async handleSearch() {
+    this.toggleSpinner();
+    const data = await this.fetchResults();
+    const symbolsArray = this.joinSymbols(data);
+    const allPromises = await this.fetchAndCombinePromises(symbolsArray);
+    this.onSearchCallback(allPromises);
+  }
+
+  checkQueryOnLoad() {
+    const url = new URL(window.location);
+    const query = url.searchParams.get("query");
+    if (query) {
+      const searchInput = this.el.querySelector("#search-input");
+      searchInput.value = query;
+    }
+  }
+
+  setQueryParams(value) {
+    const url = new URL(window.location);
+    url.searchParams.set("query", value);
+    window.history.pushState(null, "", url.toString());
   }
 
   async fetchResults() {
     const searchInput = this.el.querySelector("#search-input");
+    this.setQueryParams(searchInput.value);
     try {
       const res = await fetch(
         `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${searchInput.value}&limit=10&exchange=NASDAQ`

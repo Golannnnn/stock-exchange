@@ -48,7 +48,8 @@ class SearchResult {
   async renderResults(companies) {
     this.toggleSpinner();
     const allPromises = await companies;
-    allPromises.forEach(async (obj) => {
+    allPromises.forEach((obj) => {
+      if (Object.keys(obj).length === 0) return;
       if (obj.profile) {
         const company = obj.profile;
         this.modifyHTML(
