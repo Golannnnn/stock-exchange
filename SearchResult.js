@@ -2,6 +2,7 @@ class SearchResult {
   constructor(el) {
     this.el = el;
     this.render();
+    // this.compareCompanies();
   }
 
   render() {
@@ -19,6 +20,7 @@ class SearchResult {
           <th scope="col" class="fw-light">Symbol</th>
           <th scope="col" class="fw-light">Name</th>
           <th scope="col" class="fw-light">Change</th>
+          <th scope="col" class="fw-light">Compare</th>
         </tr>
       </thead>
       <tbody class="tbody"></tbody>
@@ -86,23 +88,36 @@ class SearchResult {
     return newText;
   }
 
-  async modifyHTML(sym, img, name, change) {
+  async modifyHTML(sym, img, name, change, company) {
     const tbody = document.querySelector(".tbody");
     const checkedImg = await this.testImage(img);
     tbody.innerHTML += `
     <tr>
-      <td class="fw-bold stock-symbol">${this.highlightSearchTerms(sym)}</td>
-      <td class="text-break">
-      <img class="search-image" src="${checkedImg}" />
-      <a class="text-decoration-none stock-name" href="./company.html?symbol=${sym}">${this.highlightSearchTerms(
+    <td class="fw-bold stock-symbol">${this.highlightSearchTerms(sym)}</td>
+    <td class="text-break">
+    <img class="search-image" src="${checkedImg}" />
+    <a class="text-decoration-none stock-name" href="./company.html?symbol=${sym}">${this.highlightSearchTerms(
       name
     )}</a>
       </td>
       <td class="fw-bold">${this.isNumberNegative(
         this.roundNumber(change)
       )}</td>
-    </tr>
-    `;
+        <td><button type="button" class="btn btn-light">Compare</button></td>
+        </tr>
+        `;
+    this.compareCompanies(sym, company);
+  }
+
+  compareCompanies(sym, company) {
+    const tbody = document.querySelector("tbody");
+    tbody.addEventListener("click", (e) => {
+      if (e.target.tagName !== "BUTTON") return;
+      const symbol = e.target.parentElement.parentElement.children[0].innerText;
+      if (sym === symbol) {
+        console.log(company);
+      }
+    });
   }
 
   roundNumber(n) {
