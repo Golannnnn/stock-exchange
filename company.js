@@ -59,10 +59,14 @@ const modifyHTML = async (img, name, price, changes, desc, site) => {
   <span>${name}</span>
   </div>
   <p class="light-font"><b>Stock price: $${price} ${isNumberNegative(
-    changes
+    roundNumber(changes)
   )}</b></p>
   <p class="light-font">${desc} <a href="${site}" target="_blank">${site}</a></p>
 `;
+};
+
+const roundNumber = (n) => {
+  return Math.round(n * 100) / 100;
 };
 
 const shortenString = (str) => {

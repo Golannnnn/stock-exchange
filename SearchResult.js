@@ -56,7 +56,8 @@ class SearchResult {
           obj.symbol,
           company.image,
           company.companyName,
-          company.changesPercentage
+          company.changesPercentage,
+          company
         );
       } else {
         obj.companyProfiles.forEach((obj) => {
@@ -65,7 +66,8 @@ class SearchResult {
             obj.symbol,
             company.image,
             company.companyName,
-            company.changesPercentage
+            company.changesPercentage,
+            company
           );
         });
       }
@@ -96,9 +98,15 @@ class SearchResult {
       name
     )}</a>
       </td>
-      <td class="fw-bold">${this.isNumberNegative(change)}</td>
+      <td class="fw-bold">${this.isNumberNegative(
+        this.roundNumber(change)
+      )}</td>
     </tr>
     `;
+  }
+
+  roundNumber(n) {
+    return Math.round(n * 100) / 100;
   }
 
   isNumberNegative(n) {
