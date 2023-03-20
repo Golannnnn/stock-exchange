@@ -156,9 +156,9 @@ class Compare {
       .join("");
 
     if (this.array.length === 1) {
-      this.link.innerHTML = `Compare 1 company`;
+      this.link.innerHTML = `Compare 1 company &rarr;`;
     } else if (this.array.length > 1) {
-      this.link.innerHTML = `Compare ${this.array.length} companies`;
+      this.link.innerHTML = `Compare ${this.array.length} companies &rarr;`;
     } else {
       this.link.innerHTML = "";
     }
