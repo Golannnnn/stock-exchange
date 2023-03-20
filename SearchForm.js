@@ -1,4 +1,6 @@
 class SearchForm {
+  API_URL =
+    "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3";
   constructor(el) {
     this.el = el;
     this.render();
@@ -85,7 +87,7 @@ class SearchForm {
     this.setQueryParams(searchInput.value);
     try {
       const res = await fetch(
-        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${searchInput.value}&limit=10&exchange=NASDAQ`
+        `${this.API_URL}/search?query=${searchInput.value}&limit=10&exchange=NASDAQ`
       );
       const json = await res.json();
       return json;
@@ -96,11 +98,9 @@ class SearchForm {
 
   async fetchCompanyInfo(symbols) {
     try {
-      const res = await fetch(
-        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbols}`
+      return fetch(`${this.API_URL}/company/profile/${symbols}`).then((res) =>
+        res.json()
       );
-      const json = await res.json();
-      return json;
     } catch (err) {
       console.log(err);
     }
@@ -120,8 +120,8 @@ class SearchForm {
   async fetchAndCombinePromises(array) {
     const arr = await array;
     try {
-      const promises = arr.map(async (batch) => {
-        const promise = await this.fetchCompanyInfo(batch);
+      const promises = arr.map((batch) => {
+        const promise = this.fetchCompanyInfo(batch);
         return promise;
       });
 

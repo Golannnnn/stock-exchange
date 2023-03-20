@@ -1,4 +1,5 @@
 class CompanyInfo {
+  API_URL = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3`;
   constructor(el, symbol) {
     this.el = el;
     this.symbol = symbol;
@@ -22,9 +23,7 @@ class CompanyInfo {
   async fetchSymbol() {
     try {
       const symbol = this.symbol;
-      const res = await fetch(
-        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbol}`
-      );
+      const res = await fetch(`${this.API_URL}/company/profile/${symbol}`);
       const json = await res.json();
       return json;
     } catch (err) {
@@ -114,7 +113,7 @@ class CompanyInfo {
     try {
       const symbol = this.symbol;
       const res = await fetch(
-        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbol}?serietype=line`
+        `${this.API_URL}/historical-price-full/${symbol}?serietype=line`
       );
       const json = await res.json();
       return json;
