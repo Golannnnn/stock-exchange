@@ -15,7 +15,7 @@ class SearchForm {
       "d-flex",
       "flex-column",
       "align-items-center",
-      "mb-5"
+      "mb-4"
     );
     this.el.innerHTML = `
     <div class="d-flex container-md justify-content-center">  

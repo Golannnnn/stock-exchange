@@ -2,7 +2,8 @@ class SearchResult {
   constructor(el) {
     this.el = el;
     this.render();
-    // this.compareCompanies();
+    this.compareArray = [];
+    this.compareInstance = new Compare();
   }
 
   render() {
@@ -14,6 +15,7 @@ class SearchResult {
     );
     this.el.innerHTML = `
     <div class="table-responsive container-lg container-xl">
+    <div id="compare"><div id="compare-container"></div><a id="compare-link"></a></div>
     <table class="table table-hover table-dark">
       <thead class="default-table">
         <tr>
@@ -58,8 +60,7 @@ class SearchResult {
           obj.symbol,
           company.image,
           company.companyName,
-          company.changesPercentage,
-          company
+          company.changesPercentage
         );
       } else {
         obj.companyProfiles.forEach((obj) => {
@@ -68,8 +69,7 @@ class SearchResult {
             obj.symbol,
             company.image,
             company.companyName,
-            company.changesPercentage,
-            company
+            company.changesPercentage
           );
         });
       }
@@ -88,7 +88,7 @@ class SearchResult {
     return newText;
   }
 
-  async modifyHTML(sym, img, name, change, company) {
+  async modifyHTML(sym, img, name, change) {
     const tbody = document.querySelector(".tbody");
     const checkedImg = await this.testImage(img);
     tbody.innerHTML += `
@@ -106,16 +106,16 @@ class SearchResult {
         <td><button type="button" class="btn btn-light">Compare</button></td>
         </tr>
         `;
-    this.compareCompanies(sym, company);
+    this.handleCompareBtnClick(sym);
   }
 
-  compareCompanies(sym, company) {
+  handleCompareBtnClick(sym) {
     const tbody = document.querySelector("tbody");
     tbody.addEventListener("click", (e) => {
       if (e.target.tagName !== "BUTTON") return;
       const symbol = e.target.parentElement.parentElement.children[0].innerText;
       if (sym === symbol) {
-        console.log(company);
+        this.compareInstance.add(sym);
       }
     });
   }
@@ -137,5 +137,53 @@ class SearchResult {
     tbody.innerHTML = "";
     spinner.classList.toggle("d-none");
     searchButton.disabled = !searchButton.disabled;
+  }
+}
+
+class Compare {
+  constructor() {
+    this.array = [];
+    this.container = document.querySelector("#compare-container");
+    this.link = document.querySelector("#compare-link");
+    this.remove();
+  }
+
+  render() {
+    this.container.innerHTML = this.array
+      .map((sym) => {
+        return `<span class="compare-element">${sym}<span class="remove-compare-element">x</span></span>`;
+      })
+      .join("");
+
+    if (this.array.length === 1) {
+      this.link.innerHTML = `Compare 1 company`;
+    } else if (this.array.length > 1) {
+      this.link.innerHTML = `Compare ${this.array.length} companies`;
+    } else {
+      this.link.innerHTML = "";
+    }
+
+    this.link.setAttribute(
+      "href",
+      `./company.html?symbols=${this.array.join()}`
+    );
+  }
+
+  add(symbol) {
+    if (this.array.includes(symbol)) return;
+    this.array.push(symbol);
+    this.render();
+  }
+
+  remove() {
+    this.container.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-compare-element")) {
+        const elementText = e.target.parentElement.innerText;
+        const symbol = elementText.slice(0, -1);
+        const index = this.array.indexOf(symbol);
+        this.array.splice(index, 1);
+        this.render();
+      }
+    });
   }
 }
