@@ -48,9 +48,6 @@ class CompanyInfo {
         company.website
       );
     }
-    if (data.companyProfiles) {
-      console.log(data.companyProfiles);
-    }
   }
 
   async testImage(URL) {

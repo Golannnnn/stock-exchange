@@ -5,6 +5,11 @@ html {
   color: white !important;
 }
 
+#container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
@@ -223,10 +228,17 @@ thead th {
   .container-lg.container-xl {
     width: 75%;
   }
+  .main-container {
+    max-width: max-content;
+  }
 }
 
 @media only screen and (min-width: 1200px) {
   .container-lg.container-xl {
     width: 75%;
+  }
+
+  .main-container {
+    max-width: 500px;
   }
 }
