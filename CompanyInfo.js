@@ -7,13 +7,13 @@ class CompanyInfo {
 
   render() {
     this.el.innerHTML = `
-      <div id="info-container"></div>
-      <div class="spinner-border d-none" role="status" id="info-spinner">
+      <div class="info-container"></div>
+      <div class="spinner-border d-none info-spinner" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <canvas id="myChart"></canvas>
+      <canvas class="myChart"></canvas>
 
-      <div class="spinner-border d-none" role="status" id="chart-spinner">
+      <div class="spinner-border d-none chart-spinner" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     `;
@@ -33,20 +33,25 @@ class CompanyInfo {
   }
 
   async displaySymbol() {
-    const infoSpinner = document.querySelector("#info-spinner");
+    const infoSpinner = this.el.querySelector(".info-spinner");
     this.toggleSpinner(infoSpinner);
     const data = await this.fetchSymbol();
     this.toggleSpinner(infoSpinner);
-    const company = data.profile;
-    const description = this.shortenString(company.description);
-    this.modifyHTML(
-      company.image,
-      company.companyName,
-      company.price,
-      company.changesPercentage,
-      description,
-      company.website
-    );
+    if (data.profile) {
+      const company = data.profile;
+      const description = this.shortenString(company.description);
+      this.modifyHTML(
+        company.image,
+        company.companyName,
+        company.price,
+        company.changesPercentage,
+        description,
+        company.website
+      );
+    }
+    if (data.companyProfiles) {
+      console.log(data.companyProfiles);
+    }
   }
 
   async testImage(URL) {
@@ -64,7 +69,7 @@ class CompanyInfo {
   }
 
   async modifyHTML(img, name, price, changes, desc, site) {
-    const infoContainer = document.querySelector("#info-container");
+    const infoContainer = this.el.querySelector(".info-container");
     const checkedImg = await this.testImage(img);
     infoContainer.innerHTML = `
   <div class="company-title">
@@ -83,6 +88,7 @@ class CompanyInfo {
   }
 
   shortenString(str) {
+    if (str === null) return "";
     if (str.length <= 500) {
       return str;
     } else {
@@ -138,13 +144,13 @@ class CompanyInfo {
   }
 
   async displayCompanyProfile() {
-    const chartSpinner = document.querySelector("#chart-spinner");
+    const chartSpinner = this.el.querySelector(".chart-spinner");
     this.toggleSpinner(chartSpinner);
     const data = await this.fetchCompanyProfile();
     const modifiedData = this.filterByYear(data.historical);
     const labels = modifiedData.map((obj) => obj.date);
     const price = modifiedData.map((obj) => obj.close);
-    const ctx = document.getElementById("myChart");
+    const ctx = this.el.querySelector(".myChart");
 
     // set default font color of chart labels to white
     Chart.defaults.color = "#cfcfcf";

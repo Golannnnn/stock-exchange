@@ -13,14 +13,14 @@ html {
   padding: 0px 20px 20px 20px;
 }
 
-#info-container {
+.info-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   max-width: 800px;
 }
 
-#info-container img {
+.info-container img {
   width: 70px;
   height: 70px;
 }
@@ -95,7 +95,7 @@ thead th {
   margin-right: 15px;
 }
 
-#myChart {
+.myChart {
   max-width: 800px;
   max-height: 500px;
 }

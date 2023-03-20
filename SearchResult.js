@@ -165,11 +165,12 @@ class Compare {
 
     this.link.setAttribute(
       "href",
-      `./company.html?symbols=${this.array.join()}`
+      `./company.html?symbol=${this.array.join()}`
     );
   }
 
   add(symbol) {
+    if (this.array.length === 3) return;
     if (this.array.includes(symbol)) return;
     this.array.push(symbol);
     this.render();
